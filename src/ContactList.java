@@ -4,9 +4,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+@SuppressWarnings("unused")
 public class ContactList{
 	public static Scanner in;
 	public static void main(String []args){
@@ -19,29 +25,29 @@ public class ContactList{
 				input = new ObjectInputStream(fileIn);
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
-				e2.printStackTrace();
+				//e2.printStackTrace();
 			}
 	         try {
 				 contactList = (Acquaintances) input.readObject();
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
-				e2.printStackTrace();
+				//e2.printStackTrace();
 			}
 	         try {
 				input.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 	         try {
 				fileIn.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 	      }catch(FileNotFoundException a)
 	      {
-	         System.out.println("OOPs!! File Not Found");
+	         //System.out.println("OOPs!! File Not Found");
 	      }catch(ClassNotFoundException c)
 	      {
 	         System.out.println("Acquaintances class not found");
@@ -52,7 +58,7 @@ public class ContactList{
 		boolean choose = true;
 		System.out.println("\nHello!!");
 		System.out.println("Welome to your Contact List!!");
-		int choice,internalChoice,i;
+		int choice = 0,internalChoice = 0,i;
 		String userChoice;
 		while(choose){
 			System.out.println("\nPlease Enter your Choice");
@@ -62,15 +68,27 @@ public class ContactList{
 			System.out.println("4-Display specific category of Acqaintances");
 			System.out.println("5-Search your list of Acquaintances");
 			System.out.println("6-Save and Exit");
-			choice = Integer.parseInt(in.nextLine());
+			try {
+				choice = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				choice = 100;
+			}
 			switch(choice){
-				case 1: System.out.println("What type of Acquaintance would you like to create?");
+				case 1: System.out.println("\nWhat type of Acquaintance would you like to create?");
 						System.out.println("1-Relative");
 						System.out.println("2-Personal Friends");
 						System.out.println("3-Professional Friends");
 						System.out.println("4-Casual Acquaintance");
 						System.out.print("Enter your choice : ");
-						internalChoice = Integer.parseInt(in.nextLine());
+						try {
+							internalChoice = Integer.parseInt(in.nextLine());
+						} catch (NumberFormatException e1) {
+							// TODO Auto-generated catch block
+							//e1.printStackTrace();
+							internalChoice = 100;
+						}
 						switch(internalChoice){
 							case 1: Relatives newRelative = new Relatives(); 
 									newRelative.relativeCreator();
@@ -106,13 +124,19 @@ public class ContactList{
 					          exe.printStackTrace();
 					      }
 						break;
-				case 2: System.out.println("What type of Acquaintance would you like to delete?");
+				case 2: System.out.println("\nWhat type of Acquaintance would you like to delete?");
 						System.out.println("1-Relative");
 						System.out.println("2-Personal Friends");
 						System.out.println("3-Professional Friends");
 						System.out.println("4-Casual Acquaintance");
 						System.out.print("Enter your choice : ");
-						internalChoice = Integer.parseInt(in.nextLine());
+						try {
+							internalChoice = Integer.parseInt(in.nextLine());
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							internalChoice =100;
+						}
 						switch(internalChoice){
 							case 1: System.out.print("Enter the Name of the Relative : ");
 									userChoice = in.nextLine();
@@ -260,13 +284,20 @@ public class ContactList{
 						}
 						System.out.println("");
 						break;
-				case 4:	System.out.println("Which category of Acquaintances do you want to Display?");
+				case 4:	System.out.println("\nWhich category of Acquaintances do you want to Display?");
 						System.out.println("1-Relative");
 						System.out.println("2-Personal Friends");
 						System.out.println("3-Professional Friends");
 						System.out.println("4-Casual Acquaintance");
 						System.out.print("Enter your Choice : ");
-						int displayChoice = Integer.parseInt(in.nextLine());
+						int displayChoice = 0;
+						try {
+							displayChoice = Integer.parseInt(in.nextLine());
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							displayChoice = 100;
+						}
 						switch(displayChoice){
 							case 1: i=0;
 									while(i<contactList.relativesList.size()){
@@ -279,6 +310,9 @@ public class ContactList{
 										System.out.println("		Date of Birth: "+contactList.relativesList.get(i).relativeBirthday);
 										System.out.println("		Day of Last Meeting: "+contactList.relativesList.get(i).relativeDateOfLastMeeting);
 										i++;
+									}
+									if(contactList.relativesList.size()==0){
+										System.out.println("Your Contact List for Relatives is currently empty.");
 									}
 									System.out.println("");
 									break;
@@ -295,6 +329,9 @@ public class ContactList{
 										System.out.println("		Specific Events: "+contactList.personalFriendsList.get(i).personalFriendSpecificEvents);
 										i++;
 									}
+									if(contactList.personalFriendsList.size()==0){
+										System.out.println("Your Contact List for Personal Friends is currently empty.");
+									}
 									System.out.println("");
 									break;
 							case 3: i=0;
@@ -307,6 +344,9 @@ public class ContactList{
 										System.out.println("		E-mail Address: "+contactList.professionalFriendsList.get(i).professionalFriendEmail);
 										System.out.println("		Specific Common Interest: "+contactList.professionalFriendsList.get(i).professionalFriendSpecificCommonInterest);
 										i++;
+									}
+									if(contactList.professionalFriendsList.size()==0){
+										System.out.println("Your Contact List for Professional Friends is currently empty.");
 									}
 									System.out.println("");
 									break;
@@ -323,13 +363,16 @@ public class ContactList{
 										System.out.println("		Specific Information: "+contactList.casualAcquaintancesList.get(i).casualAcquaintanceSpecificInformation);
 										i++;
 									}
+									if(contactList.casualAcquaintancesList.size()==0){
+										System.out.println("Your Contact List for Casual Acquaintances is currently empty.");
+									}
 									System.out.println("");
 									break;
 							default: System.out.println("Sorry. Invalid Choice.");
 									 break;
 									}
 						break;
-				case 5: System.out.println("Enter the Name of the Acquaintance whose Contacts you want to Search : ");
+				case 5: System.out.print("Enter the Name of the Acquaintance whose Contacts you want to Search : ");
 						String contactSearch = in.nextLine();
 						boolean search = true;
 						i=0;
@@ -434,20 +477,73 @@ class Relatives implements java.io.Serializable{
 	String relativeEmail;
 	String relativeBirthday;
 	String relativeDateOfLastMeeting;
+	transient SimpleDateFormat datef = new SimpleDateFormat("dd/MM/yyyy");
+	Calendar dateOfLastMeet = Calendar.getInstance();
+	Calendar dateOfBirth = Calendar.getInstance();
+	String regex = "[0-9]";
+	Pattern pattern = Pattern.compile(regex);
 	transient private Scanner input;
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
+	}
 	public void relativeCreator(){
 		System.out.println("You are ready to add another Relative to your Contact List");
 		input = new Scanner(System.in);
 		System.out.print("Enter the name of your Relative : ");
 		this.relativeName = input.nextLine();
-		System.out.print("Enter the Mobile Number of "+this.relativeName+" : ");
-		this.relativeMobileNumber = input.nextLine();
+		boolean mobileNumber = true;
+		while(mobileNumber){
+			System.out.print("Enter the Mobile Number of "+this.relativeName+" : ");
+			this.relativeMobileNumber = input.nextLine();
+			if(isStringLong(this.relativeMobileNumber)==true){
+				mobileNumber = false;
+			}
+			else{
+				System.out.println("Sorry. Invalid Entry. ");
+			}
+		}
+		//System.out.print("Enter the Mobile Number of "+this.relativeName+" : ");
+		//this.relativeMobileNumber = input.nextLine();
 		System.out.print("Enter the E-mail Address of "+this.relativeName+" : ");
 		this.relativeEmail = input.nextLine();
-		System.out.print("Enter the Date of Birth of "+this.relativeName+" : ");
-		this.relativeBirthday = input.nextLine();
-		System.out.print("Enter the Date of your last meeting with "+this.relativeName+" : ");
-		this.relativeDateOfLastMeeting = input.nextLine();
+		boolean date = true;
+		while(date){
+			System.out.print("Enter the Date of Birth of "+this.relativeName+"(in DD/MM/YYYY format) : ");
+			this.relativeBirthday = input.nextLine();
+			try {
+				this.dateOfBirth.setTime(datef.parse(this.relativeBirthday));
+				//System.out.println("OhYes");
+					date = false;
+				}
+		    catch (ParseException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Sorry. Incorrect Date Format. Please Enter Again.");
+				//e.printStackTrace();
+			}
+		}
+		date = true;
+		while(date){
+			System.out.print("Enter the Date of your last meeting with "+this.relativeName+"(in DD/MM/YYYY format) : ");
+			this.relativeDateOfLastMeeting = input.nextLine();
+			try {
+				this.dateOfLastMeet.setTime(datef.parse(this.relativeDateOfLastMeeting));
+				//System.out.println("OhYes");
+				date = false;
+				}
+			  catch (ParseException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Sorry. Incorrect Date Format. Please Enter Again.");
+				//e.printStackTrace();
+			}
+		}
 	}
 }
 
@@ -463,14 +559,40 @@ class PersonalFriends implements java.io.Serializable{
 	String personalFriendContextOfAcqaintance;
 	String personalFriendSpecificEvents;
 	String personalFriendDateOfAcquaintance;
+	String regex = "[0-9]";
+	Pattern pattern = Pattern.compile(regex);
+	transient SimpleDateFormat datef = new SimpleDateFormat("dd/MM/yyyy");
+	Calendar dateOfAcquaintance = Calendar.getInstance();
 	transient private Scanner input;
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
+	}
 	public void personalCreator(){
 		System.out.println("You are ready to add another Personal Friend to your Contact List");
 		input = new Scanner(System.in);
 		System.out.print("Enter the name of your Personal Friend : ");
 		this.personalFriendName = input.nextLine();
-		System.out.print("Enter the Mobile Number of "+this.personalFriendName+" : ");
-		this.personalFriendMobileNumber = input.nextLine();
+		boolean mobileNumber = true;
+		while(mobileNumber){
+			System.out.print("Enter the Mobile Number of "+this.personalFriendName+" : ");
+			this.personalFriendMobileNumber = input.nextLine();
+			if(isStringLong(this.personalFriendMobileNumber)==true){
+				mobileNumber = false;
+			}
+			else{
+				System.out.println("Sorry. Invalid Entry. ");
+			}
+		}
+		//System.out.print("Enter the Mobile Number of "+this.personalFriendName+" : ");
+		//this.personalFriendMobileNumber = input.nextLine();
 		System.out.print("Enter the E-mail Address of "+this.personalFriendName+" : ");
 		this.personalFriendEmail = input.nextLine();
 		boolean accept = true;
@@ -484,8 +606,21 @@ class PersonalFriends implements java.io.Serializable{
 				System.out.println("Sorry. Input too Long. Please enter again.");
 			}
 		}
-		System.out.print("Enter the Date of your acquaintance with "+this.personalFriendName+" : ");
-		this.personalFriendDateOfAcquaintance = input.nextLine();
+		accept = true;
+		while(accept){
+			System.out.print("Enter the Date of your Acquaintance with "+this.personalFriendName+"(in DD/MM/YYYY format) : ");
+			this.personalFriendDateOfAcquaintance = input.nextLine();
+			try {
+				this.dateOfAcquaintance.setTime(datef.parse(this.personalFriendDateOfAcquaintance));
+				//System.out.println("OhYes");
+				accept = false;
+				}
+			  catch (ParseException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Sorry. Incorrect Date Format. Please Enter Again.");
+				//e.printStackTrace();
+			}
+		}
 		accept = true;
 		while(accept){
 			System.out.print("Enter the Specific events that need to be noted (100 chars max) : ");
@@ -510,14 +645,38 @@ class ProfessionalFriends implements java.io.Serializable{
 	String professionalFriendMobileNumber;
 	String professionalFriendEmail;
 	String professionalFriendSpecificCommonInterest;
+	String regex = "[0-9]";
+	Pattern pattern = Pattern.compile(regex);
 	transient private Scanner input;
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
+	}
 	public void professionalCreator(){
 		System.out.println("You are ready to add another Professional Friend to your Contact List");
 		input = new Scanner(System.in);
 		System.out.print("Enter the name of your Professional Friend : ");
 		this.professionalFriendName = input.nextLine();
-		System.out.print("Enter the Mobile Number of "+this.professionalFriendName+" : ");
-		this.professionalFriendMobileNumber = input.nextLine();
+		boolean mobileNumber = true;
+		while(mobileNumber){
+			System.out.print("Enter the Mobile Number of "+this.professionalFriendName+" : ");
+			this.professionalFriendMobileNumber = input.nextLine();
+			if(isStringLong(this.professionalFriendMobileNumber)==true){
+				mobileNumber = false;
+			}
+			else{
+				System.out.println("Sorry. Invalid Entry. ");
+			}
+		}
+		//System.out.print("Enter the Mobile Number of "+this.professionalFriendName+" : ");
+		//this.professionalFriendMobileNumber = input.nextLine();
 		System.out.print("Enter the E-mail Address of "+this.professionalFriendName+" : ");
 		this.professionalFriendEmail = input.nextLine();
 		boolean accept = true;
@@ -547,14 +706,38 @@ class CasualAcquaintances implements java.io.Serializable{
 	String casualAcquaintanceWhenAndWhere;
 	String casualAcquaintanceCircumstances;
 	String casualAcquaintanceSpecificInformation;
+	String regex = "[0-9]";
+	Pattern pattern = Pattern.compile(regex);
 	transient private Scanner input;
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
+	}
 	public void casualCreator(){
 		System.out.println("You are ready to add another Casual Acqaintance to your Contact List");
 		input = new Scanner(System.in);
 		System.out.print("Enter the name of your Casual Acqaintance : ");
 		this.casualAcquaintanceName = input.nextLine();
-		System.out.print("Enter the Mobile Number of "+this.casualAcquaintanceName+" : ");
-		this.casualAcquaintanceMobileNumber = input.nextLine();
+		boolean mobileNumber = true;
+		while(mobileNumber){
+			System.out.print("Enter the Mobile Number of "+this.casualAcquaintanceName+" : ");
+			this.casualAcquaintanceMobileNumber = input.nextLine();
+			if(isStringLong(this.casualAcquaintanceMobileNumber)==true){
+				mobileNumber = false;
+			}
+			else{
+				System.out.println("Sorry. Invalid Entry. ");
+			}
+		}
+		//System.out.print("Enter the Mobile Number of "+this.casualAcquaintanceName+" : ");
+		//this.casualAcquaintanceMobileNumber = input.nextLine();
 		System.out.print("Enter the E-mail Address of "+this.casualAcquaintanceName+" : ");
 		this.casualAcquaintanceEmail = input.nextLine();
 		boolean accept = true;
