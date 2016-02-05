@@ -5,16 +5,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import java.awt.Color;
+import javax.swing.JScrollPane;
 
 @SuppressWarnings("unused")
 public class createCasual extends JFrame {
@@ -31,7 +35,7 @@ public class createCasual extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,14 +46,27 @@ public class createCasual extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
+	}
+	
 	/**
 	 * Create the frame.
 	 */
-	public createCasual() {
+	public createCasual(final Acquaintances contactList) {
+		setResizable(false);
 		setTitle("Add casual Acquaintances");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 706, 516);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 255, 153));
@@ -89,7 +106,79 @@ public class createCasual extends JFrame {
 		lblotherUsefulInformation.setBounds(31, 342, 362, 31);
 		contentPane.add(lblotherUsefulInformation);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(441, 141, 253, 68);
+		contentPane.add(scrollPane);
+		
+		final JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(445, 232, 249, 68);
+		contentPane.add(scrollPane_1);
+		
+		final JTextArea textArea_1 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_1);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(441, 326, 253, 68);
+		contentPane.add(scrollPane_2);
+		
+		final JTextArea textArea_2 = new JTextArea();
+		scrollPane_2.setViewportView(textArea_2);
+		
 		JButton btnSaveContact = new JButton("Save Contact");
+		btnSaveContact.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				boolean done = true;
+				CasualAcquaintances addCasual = new CasualAcquaintances();
+				addCasual.casualAcquaintanceName = textField.getText();
+				addCasual.casualAcquaintanceMobileNumber = textField_1.getText();
+				addCasual.casualAcquaintanceEmail = textField_2.getText();
+				addCasual.casualAcquaintanceWhenAndWhere  = textArea.getText();
+				addCasual.casualAcquaintanceCircumstances  = textArea_1.getText();
+				addCasual.casualAcquaintanceSpecificInformation  = textArea_2.getText();
+				if(isStringLong(addCasual.casualAcquaintanceMobileNumber)==false){
+					done = false;
+					textField_1.setText("");
+					JOptionPane.showMessageDialog(null, "Invalid Mobile Number. Mobile Number Should contain only digits");
+				}
+				if(addCasual.casualAcquaintanceWhenAndWhere.length()>100){
+					done = false;
+					JOptionPane.showMessageDialog(null, "Too many Characters in the field When and Where");
+					textArea.setText("");
+				}
+				if(addCasual.casualAcquaintanceCircumstances.length()>100){
+					done = false;
+					JOptionPane.showMessageDialog(null, "Too many Characters in the field Circumstances");
+					textArea_1.setText("");
+				}
+				if(addCasual.casualAcquaintanceSpecificInformation.length()>100){
+					done = false;
+					JOptionPane.showMessageDialog(null, "Too many Characters in the field Specific Informations");
+					textArea_2.setText("");
+				}
+				if(done){
+					contactList.casualAcquaintancesList.add(addCasual);
+					try
+				      {
+				         FileOutputStream fileOut = new FileOutputStream("contactlist");
+				         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				         out.writeObject(contactList);
+				         out.flush();
+				         out.close();
+				         fileOut.close();
+				         //System.out.println("\nAll Changes have been Saved Succcessfully!!");
+				         //System.out.println("Thank You");
+				      }catch(IOException exe)
+				      {
+				          exe.printStackTrace();
+				      }
+					JOptionPane.showMessageDialog(null, "One Casual Acquaintance Successfully Added");
+					setVisible(false);
+				}
+			}
+		});
 		btnSaveContact.setBounds(133, 432, 191, 38);
 		try {
 			image = ImageIO.read(getClass().getResource("/save.jpeg"));
@@ -101,11 +190,12 @@ public class createCasual extends JFrame {
 		contentPane.add(btnSaveContact);
 		
 		JButton btnBack = new JButton("Back");
+		btnBack.setBounds(418, 432, 176, 38);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
 			}
 		});
-		btnBack.setBounds(418, 432, 176, 38);
 		try {
 			image = ImageIO.read(getClass().getResource("/back.jpeg"));
 		} catch (IOException e) {
@@ -121,26 +211,15 @@ public class createCasual extends JFrame {
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setColumns(10);
 		textField_1.setBounds(445, 50, 249, 25);
+		textField_1.setColumns(10);
 		contentPane.add(textField_1);
 		
 		textField_2 = new JTextField();
-		textField_2.setColumns(10);
 		textField_2.setBounds(445, 88, 249, 25);
+		textField_2.setColumns(10);
 		contentPane.add(textField_2);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(445, 138, 249, 68);
-		contentPane.add(textArea);
-		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setBounds(445, 232, 249, 68);
-		contentPane.add(textArea_1);
-		
-		JTextArea textArea_2 = new JTextArea();
-		textArea_2.setBounds(445, 317, 249, 68);
-		contentPane.add(textArea_2);
 	}
 
 }

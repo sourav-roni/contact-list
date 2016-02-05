@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.imageio.ImageIO;
@@ -12,9 +13,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.JScrollPane;
 
 @SuppressWarnings("unused")
 public class createNewProfesssionalFriend extends JFrame {
@@ -31,7 +35,7 @@ public class createNewProfesssionalFriend extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,14 +46,27 @@ public class createNewProfesssionalFriend extends JFrame {
 				}
 			}
 		});
+	}*/
+	
+	public boolean isStringLong(String s)
+	{
+	    try
+	    {
+	        Long.parseLong(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public createNewProfesssionalFriend() {
+	public createNewProfesssionalFriend(final Acquaintances contactList) {
+		setResizable(false);
 		setTitle("Add New Professional Friend");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 749, 498);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 255, 153));
@@ -87,20 +104,74 @@ public class createNewProfesssionalFriend extends JFrame {
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setColumns(10);
 		textField_1.setBounds(422, 72, 306, 26);
+		textField_1.setColumns(10);
 		contentPane.add(textField_1);
 		
 		textField_2 = new JTextField();
-		textField_2.setColumns(10);
 		textField_2.setBounds(422, 137, 306, 26);
+		textField_2.setColumns(10);
 		contentPane.add(textField_2);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(422, 217, 306, 95);
-		contentPane.add(textArea);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(422, 212, 306, 94);
+		contentPane.add(scrollPane);
+		
+		
+		final JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
 		
 		JButton btnSaveContact = new JButton("Save Contact");
+		btnSaveContact.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				boolean done = true;
+				ProfessionalFriends addProfessional = new ProfessionalFriends();
+				addProfessional.professionalFriendName = textField.getText();
+				//boolean mobileNumber = true;
+				addProfessional.professionalFriendMobileNumber = textField_1.getText();
+				if(isStringLong(addProfessional.professionalFriendMobileNumber)==true){
+					done = true;
+				}
+				else{
+					done = false;
+					textField_1.setText("");
+					JOptionPane.showMessageDialog(null, "Invalid Mobile Number. Mobile Number Should contain only digits");
+				}
+				
+				
+				addProfessional.professionalFriendEmail = textField_2.getText();
+				
+				//boolean check = true;
+				
+				addProfessional.professionalFriendSpecificCommonInterest = textArea.getText();
+				if(addProfessional.professionalFriendSpecificCommonInterest.length()<=100){
+				}
+				else{
+					done = false;
+					JOptionPane.showMessageDialog(null, "Too many Characters in the field Specific Common Interest");
+					textArea.setText("");
+				}
+				if(done){
+					contactList.professionalFriendsList.add(addProfessional);
+					try
+				      {
+				         FileOutputStream fileOut = new FileOutputStream("contactlist");
+				         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				         out.writeObject(contactList);
+				         out.flush();
+				         out.close();
+				         fileOut.close();
+				         //System.out.println("\nAll Changes have been Saved Succcessfully!!");
+				         //System.out.println("Thank You");
+				      }catch(IOException exe)
+				      {
+				          exe.printStackTrace();
+				      }
+					JOptionPane.showMessageDialog(null, "One Professional Friend Successfully Added");
+					setVisible(false);
+				}
+			}
+		});
 		btnSaveContact.setBounds(75, 374, 260, 61);
 		try {
 			image = ImageIO.read(getClass().getResource("/save.jpeg"));
@@ -112,11 +183,12 @@ public class createNewProfesssionalFriend extends JFrame {
 		contentPane.add(btnSaveContact);
 		
 		JButton btnNewButton = new JButton("Back");
+		btnNewButton.setBounds(440, 374, 227, 57);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
 			}
 		});
-		btnNewButton.setBounds(440, 374, 227, 57);
 		try {
 			image = ImageIO.read(getClass().getResource("/back.jpeg"));
 		} catch (IOException e) {
@@ -125,6 +197,7 @@ public class createNewProfesssionalFriend extends JFrame {
 		}
 		btnNewButton.setIcon(new ImageIcon(image));
 		contentPane.add(btnNewButton);
+		
 	}
 
 }

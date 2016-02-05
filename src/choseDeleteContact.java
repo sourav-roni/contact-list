@@ -3,25 +3,25 @@ import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("unused")
-public class chooseCreateContact extends JFrame {
+public class choseDeleteContact extends JFrame {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3388684712877091633L;
+	private static final long serialVersionUID = 4581458052650972638L;
 	private JPanel contentPane;
 
 	/**
@@ -31,7 +31,7 @@ public class chooseCreateContact extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					chooseCreateContact frame = new chooseCreateContact();
+					choseDeleteContact frame = new choseDeleteContact();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,15 +43,14 @@ public class chooseCreateContact extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public chooseCreateContact(final Acquaintances contactList) {
+	public choseDeleteContact(final Acquaintances contactList) {
 		setResizable(false);
-		setTitle("Select type of Contact \n");
+		setTitle("Select Type of Contact");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 509, 380);
+		setBounds(100, 100, 632, 425);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 255, 153));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(getClass().getResource("/contactlist.jpg"));
@@ -60,51 +59,52 @@ public class chooseCreateContact extends JFrame {
 			e.printStackTrace();
 		}
 		setIconImage(image);
+		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblWhichTypeOf = new JLabel("Which Type of Contact do you want Create ?");
+		JLabel lblWhichTypeOf = new JLabel("Which Type of Contact do you want Delete ?");
 		lblWhichTypeOf.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWhichTypeOf.setBounds(72, 38, 351, 15);
+		lblWhichTypeOf.setBounds(140, 12, 351, 15);
 		contentPane.add(lblWhichTypeOf);
 		
 		JButton btnRelatives = new JButton("Relatives");
 		btnRelatives.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createNewRelative addRelative = new createNewRelative(contactList);
-				addRelative.setVisible(true);
+				relativeDelete relDel = new relativeDelete(contactList);
+				relDel.setVisible(true);
 			}
 		});
-		btnRelatives.setBounds(138, 78, 233, 25);
+		btnRelatives.setBounds(189, 69, 233, 25);
 		contentPane.add(btnRelatives);
 		
 		JButton btnPersonalFriends = new JButton("Personal Friends");
 		btnPersonalFriends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createNewPersonal addPersonal = new createNewPersonal(contactList);
-				addPersonal.setVisible(true);
+				personalDelete personDel = new personalDelete(contactList);
+				personDel.setVisible(true);
 			}
 		});
-		btnPersonalFriends.setBounds(138, 129, 233, 25);
+		btnPersonalFriends.setBounds(189, 130, 233, 25);
 		contentPane.add(btnPersonalFriends);
 		
 		JButton btnProfessionalFriends = new JButton("Professional Friends");
 		btnProfessionalFriends.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createNewProfesssionalFriend addProfessional = new createNewProfesssionalFriend(contactList);
-				addProfessional.setVisible(true);
+				professionalDelete professionalDel = new professionalDelete(contactList);
+				professionalDel.setVisible(true);
 			}
 		});
-		btnProfessionalFriends.setBounds(138, 182, 233, 25);
+		btnProfessionalFriends.setBounds(189, 187, 233, 25);
 		contentPane.add(btnProfessionalFriends);
 		
 		JButton btnCasualAcquaintances = new JButton("Casual Acquaintances");
 		btnCasualAcquaintances.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createCasual addCasual = new createCasual(contactList);
-				addCasual.setVisible(true);
+				casualDelete casDel = new casualDelete(contactList);
+				casDel.setVisible(true);
 			}
 		});
-		btnCasualAcquaintances.setBounds(138, 238, 233, 25);
+		btnCasualAcquaintances.setBounds(189, 251, 233, 25);
 		contentPane.add(btnCasualAcquaintances);
 		
 		JButton btnBack = new JButton("Back");
@@ -113,7 +113,7 @@ public class chooseCreateContact extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnBack.setBounds(368, 313, 117, 25);
+		btnBack.setBounds(487, 310, 112, 55);
 		try {
 			image = ImageIO.read(getClass().getResource("/back.jpeg"));
 		} catch (IOException e) {
@@ -123,4 +123,5 @@ public class chooseCreateContact extends JFrame {
 		btnBack.setIcon(new ImageIcon(image));
 		contentPane.add(btnBack);
 	}
+
 }
